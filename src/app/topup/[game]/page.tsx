@@ -9,8 +9,9 @@ export function generateStaticParams() {
   return Object.keys(gamesData).map((game) => ({ game }));
 }
 
-export function generateMetadata({ params }: { params: { game: string } }) {
-  const game = gamesData[params.game];
+export async function generateMetadata({ params }: { params: Promise<{ game: string }> }) {
+  const { game: gameSlug } = await params;
+  const game = gamesData[gameSlug];
   if (!game) return { title: "Not Found" };
   return {
     title: `Top Up ${game.name} Termurah - Kepo.id`,
@@ -18,8 +19,9 @@ export function generateMetadata({ params }: { params: { game: string } }) {
   };
 }
 
-export default function GamePage({ params }: { params: { game: string } }) {
-  const game = gamesData[params.game];
+export default async function GamePage({ params }: { params: Promise<{ game: string }> }) {
+  const { game: gameSlug } = await params;
+  const game = gamesData[gameSlug];
   if (!game) notFound();
 
   return (
